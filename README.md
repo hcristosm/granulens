@@ -95,10 +95,10 @@ result.export_json("./results/summary_stats.json")
 ```
 ## 📊 Output Artifacts
 Running an analysis generates four primary artifacts in your output directory:
-1. *_overlay.png: Visual validation map highlighting individual particles with transparent color fills and marked boundary lines.
-2. *_psd_curve.png: Publication-ready plot featuring the cumulative particle size distribution curve and labeled $D_{10}$, $D_{50}$, and $D_{90}$ threshold lines.
-3. *_metrics.csv: Tabular dataset containing detailed grain-by-grain measurements for downstream analysis in Excel, Pandas, or R.
-4. *_summary.json: Structured metadata summary containing total counts, mean diameter, standard deviation, and key distribution percentiles.
+1. overlay.png: Visual validation map highlighting individual particles with transparent color fills and marked boundary lines.
+2. psd_curve.png: Publication-ready plot featuring the cumulative particle size distribution curve and labeled $D_{10}$, $D_{50}$, and $D_{90}$ threshold lines.
+3. metrics.csv: Tabular dataset containing detailed grain-by-grain measurements for downstream analysis in Excel, Pandas, or R.
+4. summary.json: Structured metadata summary containing total counts, mean diameter, standard deviation, and key distribution percentiles.
 ## 📁 Repository Structure
 ```bash
 granulens/
