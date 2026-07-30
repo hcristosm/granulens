@@ -1,0 +1,33 @@
+[build-system]
+requires = ["flit_core >=3.2,<4.0"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "granulens"
+version = "0.1.0"
+description = "Automated Digital Granulometry & Particle Size Distribution using Computer Vision"
+readme = "README.md"
+authors = [
+    { name = "Mateus Leptokarydis" }
+]
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+    "opencv-python>=4.8.0",
+    "numpy>=1.24.0",
+    "matplotlib>=3.7.0",
+    "scipy>=1.10.0",
+    "typer>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+]
+
+[project.scripts]
+granulens = "granulens.cli:app"
+
+[tool.flit.module]
+name = "granulens"

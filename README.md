@@ -1,72 +1,83 @@
-# granulens 🪨🔬
+======================================================================
+GRANULENS - AUTOMATED DIGITAL GRANULOMETRY
+======================================================================
 
-> **Automated Digital Granulometry & Particle Size Distribution using Computer Vision**
+DESCRICAO
+---------
+GranuLens e uma biblioteca e ferramenta de linha de comando em Python
+projetada para automatizar a analise granulometrica digital a partir de
+imagens de graos, sedimentos e particulas.
 
-[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://python.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+A ferramenta utiliza filtro Gaussiano, limiarizacao de Otsu, Transformada
+de Distancia e o algoritmo Watershed para segmentar particulas encostadas
+e calcular a curva de distribuicao acumulada (D10, D50, D90).
 
-`granulens` is a lightweight Python tool and CLI designed to extract particle size distribution (PSD) from digital images of grains, aggregates, and sediments. Using classic image processing (Adaptive Thresholding + Watershed Segmentation), it isolates touching particles, calculates geometric metrics, and plots cumulative particle-size distribution curves ($D_{10}$, $D_{50}$, $D_{90}$).
 
----
+FUNCIONALIDADES
+---------------
+* Segmentacao precisa de graos adjacentes (Watershed).
+* Metricas geometricas completas:
+  - Area (px2 e mm2)
+  - Diametro equivalente (deq)
+  - Diametros de Feret (Minimo e Maximo)
+  - Razao de aspecto e Esfericidade
+* Analise Granulometrica (PSD): Calculo de D10, D50 e D90.
+* Exportacao em PNG (overlay e grafico), CSV (particulas) e JSON (resumo).
 
-## 📸 Visual Overview
 
-| Input Image | Watershed Segmentation | Cumulative PSD Curve |
-|:---:|:---:|:---:|
-| ![](docs/assets/input_sample.png) | ![](docs/assets/segmented_sample.png) | ![](docs/assets/psd_curve.png) |
+INSTALACAO
+----------
+1. Dependencias do sistema (Linux / Codespaces):
+   sudo apt-get update && sudo apt-get install -y libgl1 libglib2.0-0
 
----
+2. Instalar pacote em modo editavel:
+   pip install -e ".[dev]"
 
-## ✨ Key Features
 
-* 🔍 **Touching Particle Separation:** Uses distance transform + Watershed algorithm to isolate overlapping or touching grains.
-* 📏 **Scale Calibration:** Convert pixels to millimeters via direct scale factor (`--scale`) or reference marker.
-* 📊 **Granulometric Indicators:** Automatic calculation of $D_{10}$, $D_{50}$ (median grain size), and $D_{90}$.
-* 💻 **Dual Mode:** Use it as a terminal CLI tool or import it directly as a Python module.
-* 📁 **Export Capabilities:** Export overlay images (PNG), cumulative plots, and raw metrics (CSV/JSON).
-
----
-
-## 🚀 Quickstart
-
-### Installation
-
-Clone the repository and install the package locally:
-
-```bash
-git clone [https://github.com/seu-usuario/granulens.git](https://github.com/seu-usuario/granulens.git)
-cd granulens
-pip install -e .
-```
-## CLI Usage
-Analyze an image directly from the terminal
-```bash
-# Analyze image with a scale factor of 0.05 mm/pixel
+COMO USAR VIA TERMINAL (CLI)
+----------------------------
 granulens analyze examples/sample_grains.png --scale 0.05 --output ./results
-```
-## Python API
-```bash
-from granulens import GranuLens
 
-# Initialize analyzer with scale factor (mm per pixel)
-analyzer = GranuLens(scale_mm_per_px=0.05)
+Opcoes:
+  --scale, -s        Fator de conversao mm por pixel (padrao: 1.0)
+  --min-distance, -d Distancia minima em px entre graos (padrao: 15)
+  --output, -o       Diretorio de saida (padrao: ./results)
 
-# Process target image
-results = analyzer.process("examples/sample_grains.png")
 
-# Inspect key granulometric parameters
-print(f"Total grains detected: {results.total_particles}")
-print(f"D50 (Median size): {results.d50:.2f} mm")
+COMO USAR VIA PYTHON (BIBLIOTECA)
+---------------------------------
+from granulens.core import GranuLens
 
-# Save segmented output and cumulative curve
-results.save_plots("./output/")
-```
-## Computed Metrics
-For every detected particle, `granulens` calculates:
+analyzer = GranuLens(scale_mm_per_px=0.05, min_distance=15)
+result = analyzer.process("caminho/imagem.png")
 
-* **Equivalent Diameter ($d_{eq}$):** $d_{eq} = 2 \cdot \sqrt{\frac{\text{Area}}{\pi}}$
-* **Feret Diameters:** Maximum and minimum calipers.
-* **Aspect Ratio & Sphericity:** Particle shape indicators.
+print("D50:", result.summary.d50)
+result.save_plots(output_dir="./results")
+result.export_csv("./results/metricas.csv")
+result.export_json("./results/resumo.json")
 
-## License
-Distributed under the MIT License. See LICENSE for more information.
+
+ESTRUTURA DO PROJETO
+--------------------
+granulens/
+  ├── src/granulens/
+  │     ├── __init__.py
+  │     ├── segmentation.py
+  │     ├── metrics.py
+  │     ├── visualization.py
+  │     ├── core.py
+  │     └── cli.py
+  ├── examples/
+  │     └── generate_sample.py
+  ├── tests/
+  ├── pyproject.toml
+  └── README.txt
+
+
+EXECUCAO DE TESTES
+------------------
+pytest
+
+======================================================================
+Autor: Mateus Leptokarydis
+======================================================================
