@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "granulens"
-version = "0.1.0"
+version = "1.0.1"
 description = "Automated Digital Granulometry & Particle Size Distribution using Computer Vision"
 readme = "README.md"
 authors = [
