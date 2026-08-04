@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import cv2
 import numpy as np
+from scipy import ndimage as ndi
 
 
 @dataclass
@@ -57,9 +58,14 @@ def segment_grains(
     # Transformada de Distância para identificar os centros dos grãos
     dist_transform = cv2.distanceTransform(opening, cv2.DIST_L2, 5)
 
-    thresh_value = 0.3 * dist_transform.max() if min_distance <= 0 else (min_distance / 100.0) * dist_transform.max()
-    _, sure_fg = cv2.threshold(dist_transform, thresh_value, 255, 0)
-    sure_fg = np.uint8(sure_fg)
+    # Marcadores via máximos locais da transformada de distância: cada pico
+    # isolado por pelo menos `min_distance` pixels de outros picos vira a
+    # semente de um grão distinto, permitindo ao Watershed separar grãos
+    # encostados/sobrepostos em vez de tratá-los como um único blob.
+    footprint_size = max(3, 2 * min_distance + 1)
+    local_max = ndi.maximum_filter(dist_transform, size=footprint_size) == dist_transform
+    local_max &= dist_transform > 0.05 * dist_transform.max()
+    sure_fg = (local_max * 255).astype(np.uint8)
 
     unknown = cv2.subtract(sure_bg, sure_fg)
 

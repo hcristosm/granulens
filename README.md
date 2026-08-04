@@ -1,7 +1,7 @@
 # GranuLens 🔬
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: BSD 3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 **Automated Digital Granulometry and Particle Size Distribution (PSD) Analysis using Computer Vision.**
@@ -51,12 +51,12 @@ sudo apt-get update && sudo apt-get install -y libgl1 libglib2.0-0
 
 Clone the repository and install granulens in editable mode with development dependencies:
 ```bash
-git clone [https://github.com/seu-usuario/granulens.git](https://github.com/seu-usuario/granulens.git)
+git clone https://github.com/hcristosm/granulens.git
 cd granulens
 pip install -e ".[dev]"
 ```
 ## 🚀 Quick Start
-Option A: Command Line Interface (CLI)Analyze an image from your terminal by specifying the spatial scale ($\text{mm/px}$) and destination folder:
+Option A: Command Line Interface (CLI). Analyze an image from your terminal by specifying the spatial scale ($\text{mm/px}$) and destination folder:
 ```bash
 granulens analyze examples/sample_grains.png --scale 0.05 --output ./results
 ```
@@ -72,8 +72,8 @@ Available CLI Options:
 Option B: Python Library API
 
 Integrate granulens directly into your data science workflows or notebooks:
-```bash
-from granulens.core import GranuLens
+```python
+from granulens import GranuLens
 
 # 1. Initialize analyzer with scale factor (mm/px)
 analyzer = GranuLens(scale_mm_per_px=0.05, min_distance=15)
@@ -94,11 +94,11 @@ result.export_csv("./results/particle_metrics.csv")
 result.export_json("./results/summary_stats.json")
 ```
 ## 📊 Output Artifacts
-Running an analysis generates four primary artifacts in your output directory:
-1. overlay.png: Visual validation map highlighting individual particles with transparent color fills and marked boundary lines.
-2. psd_curve.png: Publication-ready plot featuring the cumulative particle size distribution curve and labeled $D_{10}$, $D_{50}$, and $D_{90}$ threshold lines.
-3. metrics.csv: Tabular dataset containing detailed grain-by-grain measurements for downstream analysis in Excel, Pandas, or R.
-4. summary.json: Structured metadata summary containing total counts, mean diameter, standard deviation, and key distribution percentiles.
+Running an analysis generates four primary artifacts in your output directory, each prefixed with the input image's filename (e.g. `sample_grains_overlay.png`):
+1. `<image>_overlay.png`: Visual validation map highlighting individual particles with transparent color fills and marked boundary lines.
+2. `<image>_psd_curve.png`: Publication-ready plot featuring the cumulative particle size distribution curve and labeled $D_{10}$, $D_{50}$, and $D_{90}$ threshold lines.
+3. `<image>_metrics.csv`: Tabular dataset containing detailed grain-by-grain measurements for downstream analysis in Excel, Pandas, or R.
+4. `<image>_summary.json`: Structured metadata summary containing total counts, mean diameter, standard deviation, and key distribution percentiles.
 ## 📁 Repository Structure
 ```bash
 granulens/
@@ -111,7 +111,8 @@ granulens/
 │       ├── core.py             # Orchestrator engine & exporter classes
 │       └── cli.py              # CLI implementation via Typer
 ├── examples/
-│   └── generate_sample.py      # Synthetic particle image generator
+│   ├── generate_sample.py      # Synthetic particle image generator
+│   └── quickstart.py           # Runnable example of the Python API
 ├── tests/                      # Automated unit & integration tests (pytest)
 ├── pyproject.toml              # Build config & package dependencies
 └── README.md                   # Project documentation
